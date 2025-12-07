@@ -1,0 +1,16 @@
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Python bytecode
+*.pyc
+__pycache__/
+
+# Environment Variables and Credentials (CRITICAL for security)
+.env
+*.key
+credentials.json
+
+# Large data/temp files
+/data/
+/temp/
