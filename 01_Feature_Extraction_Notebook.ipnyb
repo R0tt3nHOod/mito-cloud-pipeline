@@ -1,0 +1,127 @@
+{
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "# Cell 1: Install the Medical Library\n",
+        "# We are installing 'pydicom' on the fly because it doesn't come standard.\n",
+        "%pip install pydicom matplotlib"
+      ],
+      "outputs": [],
+      "execution_count": null,
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Cell 2: Read the MRI Scan\n",
+        "import pydicom\n",
+        "from notebookutils import mssparkutils # This is the Synapse equivalent of DBUtils\n",
+        "\n",
+        "# 1. Define the path to your file in the Data Lake\n",
+        "# Make sure the case (.DCM vs .dcm) matches exactly what you uploaded!\n",
+        "file_path = \"abfss://dicom@stgwsdata1dev.dfs.core.windows.net/0002.DCM\"\n",
+        "\n",
+        "# 2. Define where to save it locally on the \"Driver\" node\n",
+        "# We use \"file:\" to tell Synapse we mean the local hard drive, not the cloud lake\n",
+        "local_path = \"file:/tmp/temp_scan.dcm\" \n",
+        "read_path = \"/tmp/temp_scan.dcm\" # pydicom needs the path without \"file:\"\n",
+        "\n",
+        "# 3. Copy the file from the Lake to the Local Temp folder\n",
+        "mssparkutils.fs.cp(file_path, local_path)\n",
+        "\n",
+        "# 4. Crack it open using the local path\n",
+        "ds = pydicom.dcmread(read_path)\n",
+        "\n",
+        "# 5. Print the \"Secret\" Medical Data\n",
+        "print(f\"Patient ID: {ds.PatientID}\")\n",
+        "print(f\"Modality: {ds.Modality}\")\n",
+        "print(f\"Study Date: {ds.StudyDate}\")\n",
+        "\n",
+        "print(\"SUCCESS: The AI can read the medical headers.\")"
+      ],
+      "outputs": [],
+      "execution_count": null,
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Cell 3: Generate Synthetic \"Gold Standard\" Research Data\n",
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "import random\n",
+        "\n",
+        "# 1. Define the GWS Criteria (Based on the Science)\n",
+        "# Healthy: High Energy (NAA/tCr > 1.8), Fast Recovery (< 30s)\n",
+        "# GWS Type 1: Low Energy (NAA/tCr < 1.4), Slow Recovery (> 35s)\n",
+        "def generate_gws_profile(patient_id):\n",
+        "    # Randomly decide if this patient is Healthy (0) or Sick (1)\n",
+        "    is_sick = random.choice([0, 1])\n",
+        "    \n",
+        "    if is_sick:\n",
+        "        # Simulate GWS Mitochondrial Dysfunction\n",
+        "        naa_tcr = round(random.uniform(1.0, 1.4), 2)  # Low energy\n",
+        "        pcr_recovery = round(random.uniform(35.0, 60.0), 1) # Slow recovery\n",
+        "        diagnosis = \"GWS_Type_1\"\n",
+        "    else:\n",
+        "        # Simulate Healthy Veteran\n",
+        "        naa_tcr = round(random.uniform(1.8, 2.5), 2)  # Normal energy\n",
+        "        pcr_recovery = round(random.uniform(15.0, 28.0), 1) # Fast recovery\n",
+        "        diagnosis = \"Healthy\"\n",
+        "        \n",
+        "    return {\n",
+        "        \"PatientID\": patient_id,\n",
+        "        \"Modality\": \"MRS_Simulated\",\n",
+        "        \"NAA_tCr_Ratio\": naa_tcr,\n",
+        "        \"PCr_Recovery_Sec\": pcr_recovery,\n",
+        "        \"Diagnosis_Label\": diagnosis\n",
+        "    }\n",
+        "\n",
+        "# 2. Generate a Cohort of 100 Veterans\n",
+        "print(\"Generating synthetic cohort data...\")\n",
+        "veteran_data = []\n",
+        "# We use your real file's ID as the \"Index Patient\"\n",
+        "real_id = ds.PatientID\n",
+        "veteran_data.append(generate_gws_profile(real_id))\n",
+        "\n",
+        "# Generate 99 more synthetic IDs\n",
+        "for i in range(99):\n",
+        "    fake_id = f\"VET_{random.randint(10000, 99999)}\"\n",
+        "    veteran_data.append(generate_gws_profile(fake_id))\n",
+        "\n",
+        "# 3. Convert to DataFrame (The \"Table\" format)\n",
+        "df = pd.DataFrame(veteran_data)\n",
+        "\n",
+        "# 4. Save to Data Lake as a clean CSV for the AI\n",
+        "# We save it to the 'synapse' container we created\n",
+        "output_path = \"abfss://synapse@stgwsdata1dev.dfs.core.windows.net/training_data.csv\"\n",
+        "df.to_csv(output_path, index=False)\n",
+        "\n",
+        "print(f\"SUCCESS: Generated {len(df)} patient records.\")\n",
+        "print(\"Preview of the data your AI will learn from:\")\n",
+        "print(df.head())"
+      ],
+      "outputs": [],
+      "execution_count": null,
+      "metadata": {}
+    }
+  ],
+  "metadata": {
+    "language_info": {
+      "name": "python"
+    },
+    "kernelspec": {
+      "name": "synapse_pyspark",
+      "display_name": "python"
+    },
+    "description": "Extracts NAA/tCr ratios from raw DICOM files",
+    "save_output": true,
+    "synapse_widget": {
+      "version": "0.1",
+      "state": {}
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 2
+}
