@@ -1,0 +1,9 @@
+# Core Data and Analysis Libraries
+pandas
+numpy
+scikit-learn
+pydicom
+
+# Azure Synapse Specific Libraries (if needed for local testing)
+azure-storage-blob 
+azure-identity
