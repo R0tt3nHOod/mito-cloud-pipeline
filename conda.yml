@@ -1,0 +1,14 @@
+name: mitocloud-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - pandas
+    - numpy
+    - scikit-learn
+    - mlflow
+    - azure-identity
+    - azure-storage-blob
+    - joblib
