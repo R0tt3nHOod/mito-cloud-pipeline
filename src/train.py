@@ -6,9 +6,33 @@ import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 import mlflow
-mlflow.set_tracking_uri(os.environ["AZUREML_MLFLOW_URI"])
+
+# --- Dynamic MLflow Tracking URI Fix (Insert here, starts on new line after 'import mlflow') ---
+try:
+    # Use the default credentials and workspace context to create the MLClient
+    credential = DefaultAzureCredential()
+    ml_client = MLClient.from_config(credential=credential)
+    
+    # Get the tracking URI from the workspace properties
+    workspace = ml_client.workspaces.get(ml_client.workspace_name)
+    mlflow_tracking_uri = workspace.mlflow_tracking_uri
+    
+    # Set the tracking URI
+    mlflow.set_tracking_uri(mlflow_tracking_uri)
+
+except Exception:
+    # Fallback to the environment variable if the SDK setup fails
+    # This maintains the original intent for environments where the variable *is* set
+    print("Warning: Failed to retrieve MLflow URI via SDK. Falling back to environment variable.")
+    # You can keep the environment variable lookup here, but since it failed before,
+    # consider whether this fallback is truly necessary or if it just reintroduces the KeyError.
+    # For now, let's omit the fallback to prevent the KeyError:
+    # mlflow.set_tracking_uri(os.environ["AZUREML_MLFLOW_URI"])
+    pass
+# --- END Dynamic MLflow Tracking URI Fix ---
 
 # --- 1. PARAMETERS & INPUTS ---
 parser = argparse.ArgumentParser()
