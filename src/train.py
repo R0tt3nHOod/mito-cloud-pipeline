@@ -10,6 +10,19 @@ from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 import mlflow
 
+# --- RESTORED FIX: Dynamic MLflow Tracking URI ---
+# We need this because the default environment variable is missing in this context.
+try:
+    print("Attempting to set MLflow Tracking URI via SDK...")
+    credential = DefaultAzureCredential()
+    ml_client = MLClient.from_config(credential=credential)
+    workspace = ml_client.workspaces.get(ml_client.workspace_name)
+    print(f"Retrieved Tracking URI: {workspace.mlflow_tracking_uri}")
+    mlflow.set_tracking_uri(workspace.mlflow_tracking_uri)
+except Exception as e:
+    print(f"Warning: Failed to set tracking URI via SDK. Error: {e}")
+# -------------------------------------------------
+
 # --- 1. PARAMETERS & INPUTS ---
 parser = argparse.ArgumentParser()
 parser.add_argument("--training_data_path", type=str, dest="training_data_path", help="Path to the training data CSV")
