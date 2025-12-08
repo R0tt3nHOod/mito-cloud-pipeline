@@ -4,6 +4,10 @@ numpy
 scikit-learn
 pydicom
 
+# Azure ML and MLflow Integration
+azureml-mlflow
+azure-ai-ml
+
 # Azure Synapse Specific Libraries (if needed for local testing)
 azure-storage-blob 
 azure-identity
