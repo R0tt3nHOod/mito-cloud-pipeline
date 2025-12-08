@@ -1,0 +1,9 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+# --- This job will execute the data generation script ---
+code: ./src
+command: >
+  python data_gen.py
+environment: azureml:mitocloud-env:latest  # Links to your conda.yml defined environment
+compute: azureml:ag-mito-cloud-mind         # Your cost-controlled CPU cluster
+experiment_name: gwi-data-prep-v1
+description: Generates 10k synthetic 3-class data points and uploads to Data Lake.
