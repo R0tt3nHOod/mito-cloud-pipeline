@@ -3,11 +3,11 @@ channels:
   - conda-forge
 dependencies:
   - python=3.10
+  - pandas  # MOVED HERE
+  - numpy   # MOVED HERE
+  - scikit-learn # MOVED HERE
   - pip
   - pip:
-    - pandas
-    - numpy
-    - scikit-learn
     - mlflow
     - azure-identity
     - azure-storage-blob
