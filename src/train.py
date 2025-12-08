@@ -26,7 +26,6 @@ STORAGE_ACCOUNT_NAME = "agmitocloud01" # Your Data Lake
 # --- 3. MAIN TRAINING FUNCTION ---
 def train_model(df):
     
-    mlflow.set_autolog(False)
     mlflow.start_run()
 
     # Data Preparation: Separate features (X) and target (y)
