@@ -3,7 +3,7 @@ $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
 code: ./src
 command: >
   python data_gen.py
-environment: azureml:mitocloud-env-v3:1  # Links to your conda.yml defined environment
+environment: azureml://locations/eastus2/workspaces/bab3b17c-4667-4578-8a1d-5f6bb041d8e0/environments/mitocloud-env-v3/versions/1  # Links to your conda.yml defined environment
 compute: azureml:ag-mito-cloud-mind         # Your cost-controlled CPU cluster
 experiment_name: gwi-data-prep-v1
 description: Generates 10k synthetic 3-class data points and uploads to Data Lake.
