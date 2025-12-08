@@ -71,7 +71,6 @@ def train_model(df):
     mlflow.sklearn.log_model(
         sk_model=model,
         artifact_path="model",
-        registered_model_name=MODEL_NAME
     )
     
     mlflow.end_run()
