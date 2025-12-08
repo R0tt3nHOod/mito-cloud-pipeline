@@ -34,10 +34,10 @@ np.random.shuffle(target_class_balanced)
 # Syn 2 (Ataxia): Severe reduction (1.2) - linked to brainstem/sarin neurotoxicity
 # Syn 3 (Pain): Moderate reduction (1.5)
 nad_nadh = np.zeros(N_SAMPLES)
-nad_nadh[target_class == 0] = np.random.normal(2.0, 0.4, np.sum(target_class == 0))
-nad_nadh[target_class == 1] = np.random.normal(1.8, 0.4, np.sum(target_class == 1))
-nad_nadh[target_class == 2] = np.random.normal(1.2, 0.3, np.sum(target_class == 2))
-nad_nadh[target_class == 3] = np.random.normal(1.5, 0.4, np.sum(target_class == 3))
+nad_nadh[target_class_balanced == 0] = np.random.normal(2.0, 0.4, np.sum(target_class_balanced == 0))
+nad_nadh[target_class_balanced == 1] = np.random.normal(1.8, 0.4, np.sum(target_class_balanced == 1))
+nad_nadh[target_class_balanced == 2] = np.random.normal(1.2, 0.3, np.sum(target_class_balanced == 2))
+nad_nadh[target_class_balanced == 3] = np.random.normal(1.5, 0.4, np.sum(target_class_balanced == 3))
 
 # -- PCr/ATP Ratio (Cellular Energy) --
 # Healthy: Normal (1.8)
@@ -45,10 +45,10 @@ nad_nadh[target_class == 3] = np.random.normal(1.5, 0.4, np.sum(target_class == 
 # Syn 2: Low (1.3) - High energy demand/failure
 # Syn 3: Very Low (1.1) - Muscle/Joint specific, so ATP depletion in muscle is high
 pcr_atp = np.zeros(N_SAMPLES)
-pcr_atp[target_class == 0] = np.random.normal(1.8, 0.3, np.sum(target_class == 0))
-pcr_atp[target_class == 1] = np.random.normal(1.7, 0.3, np.sum(target_class == 1))
-pcr_atp[target_class == 2] = np.random.normal(1.3, 0.3, np.sum(target_class == 2))
-pcr_atp[target_class == 3] = np.random.normal(1.1, 0.2, np.sum(target_class == 3))
+pcr_atp[target_class_balanced == 0] = np.random.normal(1.8, 0.3, np.sum(target_class_balanced == 0))
+pcr_atp[target_class_balanced == 1] = np.random.normal(1.7, 0.3, np.sum(target_class_balanced == 1))
+pcr_atp[target_class_balanced == 2] = np.random.normal(1.3, 0.3, np.sum(target_class_balanced == 2))
+pcr_atp[target_class_balanced == 3] = np.random.normal(1.1, 0.2, np.sum(target_class_balanced == 3))
 
 # -- GSH/GSSG Ratio (Oxidative Stress) --
 # Healthy: High (30.0)
@@ -56,17 +56,17 @@ pcr_atp[target_class == 3] = np.random.normal(1.1, 0.2, np.sum(target_class == 3
 # Syn 2: High Stress (18.0)
 # Syn 3: High Stress (20.0)
 gsh_gssg = np.zeros(N_SAMPLES)
-gsh_gssg[target_class == 0] = np.random.normal(30.0, 6.0, np.sum(target_class == 0))
-gsh_gssg[target_class == 1] = np.random.normal(25.0, 5.0, np.sum(target_class == 1))
-gsh_gssg[target_class == 2] = np.random.normal(18.0, 4.0, np.sum(target_class == 2))
-gsh_gssg[target_class == 3] = np.random.normal(20.0, 5.0, np.sum(target_class == 3))
+gsh_gssg[target_class_balanced == 0] = np.random.normal(30.0, 6.0, np.sum(target_class_balanced == 0))
+gsh_gssg[target_class_balanced == 1] = np.random.normal(25.0, 5.0, np.sum(target_class_balanced == 1))
+gsh_gssg[target_class_balanced == 2] = np.random.normal(18.0, 4.0, np.sum(target_class_balanced == 2))
+gsh_gssg[target_class_balanced == 3] = np.random.normal(20.0, 5.0, np.sum(target_class_balanced == 3))
 
 # 4. Assemble & Clean
 df = pd.DataFrame({
     'NAD_NADH': nad_nadh,
     'PCr_ATP': pcr_atp,
     'GSH_GSSG': gsh_gssg,
-    'Haley_Syndrome': target_class 
+    'Haley_Syndrome': target_class_balanced
 })
 
 # Round to 4 decimals to act as "floats" for Azure
