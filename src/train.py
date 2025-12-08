@@ -67,7 +67,7 @@ def train_model(df):
 
 if __name__ == "__main__":
     # 1. Load the large dataset
-   data_df = pd.read_csv(data_path)
+    data_df = pd.read_csv(data_path)
     
     # 2. Train and register the model
     trained_model = train_model(data_df)
