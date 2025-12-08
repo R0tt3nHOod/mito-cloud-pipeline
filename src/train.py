@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from azure.identity import DefaultAzureCredential
 import mlflow
+mlflow.set_tracking_uri(os.environ["AZUREML_MLFLOW_URI"])
 
 # --- 1. PARAMETERS & INPUTS ---
 parser = argparse.ArgumentParser()
@@ -25,9 +26,8 @@ STORAGE_ACCOUNT_NAME = "agmitocloud01" # Your Data Lake
 
 # --- 3. MAIN TRAINING FUNCTION ---
 def train_model(df):
-    
     mlflow.start_run()
-
+    
     # Data Preparation: Separate features (X) and target (y)
     X = df[['NAD_NADH', 'PCr_ATP', 'GSH_GSSG']]
     y = df['Target_Class']
