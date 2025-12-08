@@ -1,5 +1,5 @@
 # Use a standard, stable Azure ML base image
-FROM mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest
+FROM mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:py38-cuda11.7-gpu-inteloneapi-aif
 
 # Install Python packages using pip directly
 RUN pip install --no-cache-dir \
