@@ -21,24 +21,7 @@ BLOB_NAME = "gwi_training_data_v1.csv"
 STORAGE_ACCOUNT_NAME = "agmitocloud01" # Your Data Lake
 
 # --- 2. DATA LOADING FUNCTION ---
-def load_data_from_lake():
-    """Loads data from the Data Lake using the job's Managed Identity."""
-    print("Connecting to Data Lake using Managed Identity...")
-    
-    full_path = f"https://{STORAGE_ACCOUNT_NAME}.blob.core.windows.net/{BLOB_CONTAINER_NAME}/{BLOB_NAME}"
-    
-    try:
-        # Uses the Managed Identity granted permission (via the CLI fix)
-        # We explicitly pass the token for security and reliability with the Managed Identity
-        credential = DefaultAzureCredential()
-        token = credential.get_token("https://storage.azure.com/").token
-        
-        df = pd.read_csv(full_path, storage_options={"token": token})
-        print(f"✅ Data loaded successfully. Shape: {df.shape}")
-        return df
-    except Exception as e:
-        print(f"❌ ERROR loading data. Check IAM role assignment. Details: {e}")
-        raise
+
 
 # --- 3. MAIN TRAINING FUNCTION ---
 def train_model(df):
@@ -84,7 +67,7 @@ def train_model(df):
 
 if __name__ == "__main__":
     # 1. Load the large dataset
-    data_df = load_data_from_lake()
+   data_df = pd.read_csv(data_path)
     
     # 2. Train and register the model
     trained_model = train_model(data_df)
