@@ -17,7 +17,8 @@ for class_id in [0, 1, 2, 3]:
     target_class_balanced.extend(np.random.choice([class_id], size=N_PER_CLASS))
 
 # Shuffle the final balanced target list to ensure no block training
-np.random.shuffle(target_class_balanced)
+np.random.shuffle(target_class_balanced)	np.random.shuffle(target_class_balanced)
+target_class_balanced = np.array(target_class_balanced)
 
 # 3. Generate Biomarkers with "Syndrome-Specific" shifts
 # Initialize all feature arrays to the correct size (28,000)
