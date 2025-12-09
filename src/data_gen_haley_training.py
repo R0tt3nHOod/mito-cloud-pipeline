@@ -63,7 +63,7 @@ df = pd.DataFrame({
 df = df.round(4)
 
 # 5. Save
-output_filename = "gwi_haley_balanced_28k.csv"
+output_filename = "gwi_haley_balanced_sep5_28k.csv"
 df.to_csv(output_filename, index=False)
 
 print(f"\n✅ Simulation Complete. Saved {len(df)} records to {output_filename}")
