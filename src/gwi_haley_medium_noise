@@ -1,0 +1,62 @@
+import pandas as pd
+import numpy as np
+
+# 1. Settings
+N_PER_CLASS = 7000
+N_SAMPLES_TRAIN = N_PER_CLASS * 4 
+RANDOM_SEED = 42
+np.random.seed(RANDOM_SEED)
+
+print(f"Generating {N_SAMPLES_TRAIN} records with MEDIUM NOISE (SD 0.25)...")
+
+# 2. Generate Classes
+target_class = np.concatenate([np.full(N_PER_CLASS, i) for i in range(4)])
+np.random.shuffle(target_class)
+
+# Initialize
+nad_nadh = np.empty(N_SAMPLES_TRAIN)
+pcr_atp = np.empty(N_SAMPLES_TRAIN)
+gsh_gssg = np.empty(N_SAMPLES_TRAIN)
+
+# 3. MEDIUM NOISE GENERATION (The Fix)
+# We use SD = 0.25 (vs 0.40 previously). This reduces overlap just enough to be solvable.
+
+# --- Healthy (0) ---
+nad_nadh[target_class==0] = np.random.normal(2.0, 0.25, N_PER_CLASS)
+pcr_atp[target_class==0]  = np.random.normal(1.8, 0.20, N_PER_CLASS)
+gsh_gssg[target_class==0] = np.random.normal(30.0, 4.0, N_PER_CLASS)
+
+# --- Type 1 (Cognitive) - The Problem Child ---
+# NAD 1.8 vs 2.0 with SD 0.25 allows for ~20% overlap (hard but solvable)
+nad_nadh[target_class==1] = np.random.normal(1.8, 0.25, N_PER_CLASS) 
+pcr_atp[target_class==1]  = np.random.normal(1.7, 0.20, N_PER_CLASS)
+gsh_gssg[target_class==1] = np.random.normal(25.0, 3.5, N_PER_CLASS)
+
+# --- Type 2 (Ataxia) ---
+nad_nadh[target_class==2] = np.random.normal(1.2, 0.20, N_PER_CLASS)
+pcr_atp[target_class==2]  = np.random.normal(1.3, 0.20, N_PER_CLASS)
+gsh_gssg[target_class==2] = np.random.normal(18.0, 3.0, N_PER_CLASS)
+
+# --- Type 3 (Pain) ---
+nad_nadh[target_class==3] = np.random.normal(1.5, 0.25, N_PER_CLASS)
+pcr_atp[target_class==3]  = np.random.normal(1.1, 0.15, N_PER_CLASS)
+gsh_gssg[target_class==3] = np.random.normal(20.0, 3.5, N_PER_CLASS)
+
+# 4. Feature Engineering (Keep this! It works!)
+meta_health_index = (nad_nadh/2.0) + (pcr_atp/1.8) + (gsh_gssg/30.0)
+ox_energy_interaction = nad_nadh * gsh_gssg
+
+# 5. Save
+df = pd.DataFrame({
+    'NAD_NADH': nad_nadh,
+    'PCr_ATP': pcr_atp,
+    'GSH_GSSG': gsh_gssg,
+    'Metabolic_Index': meta_health_index,
+    'Ox_Energy_Interaction': ox_energy_interaction,
+    'Haley_Syndrome': target_class
+})
+
+df = df.round(4)
+output_filename = "gwi_haley_medium_noise_28k.csv"
+df.to_csv(output_filename, index=False)
+print(f"✅ Saved {output_filename}")
