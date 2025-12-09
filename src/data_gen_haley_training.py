@@ -32,24 +32,24 @@ gsh_gssg = np.empty(N_SAMPLES_TRAIN)
 
 # --- NAD/NADH Ratio ---
 # Means (Healthy: 2.0, Syn 1: 1.8, Syn 2: 1.2, Syn 3: 1.5)
-nad_nadh[target_class_balanced == 0] = np.random.normal(2.0, 0.4, N_PER_CLASS)
-nad_nadh[target_class_balanced == 1] = np.random.normal(1.8, 0.4, N_PER_CLASS)
-nad_nadh[target_class_balanced == 2] = np.random.normal(1.2, 0.3, N_PER_CLASS)
-nad_nadh[target_class_balanced == 3] = np.random.normal(1.5, 0.4, N_PER_CLASS)
+nad_nadh[target_class_balanced == 0] = np.random.normal(2.0, 0.2, N_PER_CLASS)
+nad_nadh[target_class_balanced == 1] = np.random.normal(1.8, 0.2, N_PER_CLASS)
+nad_nadh[target_class_balanced == 2] = np.random.normal(1.2, 0.15, N_PER_CLASS)
+nad_nadh[target_class_balanced == 3] = np.random.normal(1.5, 0.2, N_PER_CLASS)
 
 # --- PCr/ATP Ratio (Cellular Energy) ---
 # Means (Healthy: 1.8, Syn 1: 1.7, Syn 2: 1.3, Syn 3: 1.1)
-pcr_atp[target_class_balanced == 0] = np.random.normal(1.8, 0.3, N_PER_CLASS)
-pcr_atp[target_class_balanced == 1] = np.random.normal(1.7, 0.3, N_PER_CLASS)
-pcr_atp[target_class_balanced == 2] = np.random.normal(1.3, 0.3, N_PER_CLASS)
-pcr_atp[target_class_balanced == 3] = np.random.normal(1.1, 0.2, N_PER_CLASS)
+pcr_atp[target_class_balanced == 0] = np.random.normal(1.8, 0.15, N_PER_CLASS)
+pcr_atp[target_class_balanced == 1] = np.random.normal(1.7, 0.15, N_PER_CLASS)
+pcr_atp[target_class_balanced == 2] = np.random.normal(1.3, 0.15, N_PER_CLASS)
+pcr_atp[target_class_balanced == 3] = np.random.normal(1.1, 0.1, N_PER_CLASS)
 
 # --- GSH/GSSG Ratio (Oxidative Stress) ---
 # Means (Healthy: 30.0, Syn 1: 25.0, Syn 2: 18.0, Syn 3: 20.0)
-gsh_gssg[target_class_balanced == 0] = np.random.normal(30.0, 6.0, N_PER_CLASS)
-gsh_gssg[target_class_balanced == 1] = np.random.normal(25.0, 5.0, N_PER_CLASS)
-gsh_gssg[target_class_balanced == 2] = np.random.normal(18.0, 4.0, N_PER_CLASS)
-gsh_gssg[target_class_balanced == 3] = np.random.normal(20.0, 5.0, N_PER_CLASS)
+gsh_gssg[target_class_balanced == 0] = np.random.normal(30.0, 3.0, N_PER_CLASS)
+gsh_gssg[target_class_balanced == 1] = np.random.normal(25.0, 2.5, N_PER_CLASS)
+gsh_gssg[target_class_balanced == 2] = np.random.normal(18.0, 2.0, N_PER_CLASS)
+gsh_gssg[target_class_balanced == 3] = np.random.normal(20.0, 2.5, N_PER_CLASS)
 
 # 4. Assemble & Clean
 df = pd.DataFrame({
